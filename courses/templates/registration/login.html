@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Log-in{% endblock %}
+
+{% block content %}
+<div class="container w-50 mt-5">
+    <h3 class="text-center mb-4">Log-in</h3>
+    <div class="card rounded-lg mx-auto">
+        <div class="card-body">
+            {% if form.errors %}
+                <div class="alert alert-danger" role="alert">
+                    Your username and password didn't match. Please try again.
+                </div>
+            {% else %}
+                <p class="text-muted">Please, use the following form to log-in:</p>
+            {% endif %}
+            <form action="{% url 'login' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.as_p }}
+                </div>
+                <input type="hidden" name="next" value="{{ next }}" />
+                <button type="submit" class="btn btn-primary">Log-in</button>
+            </form>
+            <div class="mt-3">
+                <p class="">Don't have an account? <a href="#">Register here</a></p>
+                <p class=""><a href="#">Forgot your password?</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

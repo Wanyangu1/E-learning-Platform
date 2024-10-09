@@ -36,3 +36,5 @@ python manage.py runserver
 Chat Server
 The project uses ASGI/Channels to facilitate the running of the chat server application. Make sure to follow any additional setup instructions if needed.
 
+Instructor login
+http://localhost:8000/course/mine/

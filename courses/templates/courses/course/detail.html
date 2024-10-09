@@ -5,30 +5,51 @@
 {% endblock %}
 
 {% block content %}
-  {% with subject=object.subject %}
-    <h1>
-      {{ object.title }}
-    </h1>
-    <div class="module">
-      <h2>Overview</h2>
-      <p>
-        <a href="{% url "course_list_subject" subject.slug %}">
-        {{ subject.title }}</a>.
-        {{ object.modules.count }} modules.
-        Instructor: {{ object.owner.get_full_name }}
-      </p>
-      {{ object.overview|linebreaks }}
-      {% if request.user.is_authenticated %}
-        <form action="{% url "student_enroll_course" %}" method="post">
-          {{ enroll_form }}
-          {% csrf_token %}
-          <input type="submit" value="Enroll now">
-        </form>
-      {% else %}
-        <a href="{% url "student_registration" %}" class="button">
-          Register to enroll
-        </a>
-      {% endif %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="text-center">{{ object.title }}</h1>
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h2 class="card-title">Overview</h2>
+
+          <!-- Check if 'subject' exists before creating the URL -->
+          <p class="card-text">
+            {% if subject %}
+              Subject: <a href="{% url 'course_list_subject' subject.slug %}" class="text-muted">{{ subject.title }}</a><br>
+            {% else %}
+              <em>Subject not available</em><br>
+            {% endif %}
+            Modules: {{ object.modules.count }}<br>
+            Instructor: <strong>{{ object.owner.username }}</strong>
+          </p>
+
+          <hr>
+          <div class="overview-content">
+            <p>{{ object.overview|linebreaks }}</p>
+          </div>
+
+          <div class="mt-4">
+            {% if request.user.is_authenticated %}
+              <form action="{% url 'student_enroll_course' %}" method="post" class="d-inline">
+                {{ enroll_form }}
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Enroll Now</button>
+              </form>
+            {% else %}
+              <a href="{% url 'student_registration' %}" class="btn btn-outline-primary">
+                <i class="fas fa-user-plus"></i> Register to Enroll
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
     </div>
-  {% endwith %}
+  </div>
+</div>
+
+<!-- Bootstrap and FontAwesome CDN -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
 {% endblock %}

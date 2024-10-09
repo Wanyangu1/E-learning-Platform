@@ -1,12 +1,24 @@
 {% extends "base.html" %}
-{% block title %}Delete course{% endblock %}
+
+{% block title %}Delete Course{% endblock %}
+
 {% block content %}
- <h1>Delete course "{{ object.title }}"</h1>
- <div class="module">
-   <form action="" method="post">
-     {% csrf_token %}
-     <p>Are you sure you want to delete "{{ object }}"?</p>
-     <input type="submit" value="Confirm">
-   </form>
- </div>
+<div class="container mt-5">
+  <h1 class="text-center mb-4">Delete Course "{{ object.title }}"</h1>
+  
+  <div class="module text-center">
+    <div class="alert alert-danger">
+      <strong>Warning!</strong> Are you sure you want to delete the course "{{ object.title }}"? This action cannot be undone.
+    </div>
+
+    <form action="" method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger btn-lg">Confirm Deletion</button>
+      <a href="{% url 'my_courses' %}" class="btn btn-secondary btn-lg">Cancel</a>
+    </form>
+  </div>
+</div>
+
+<!-- Bootstrap CDN -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 {% endblock %}

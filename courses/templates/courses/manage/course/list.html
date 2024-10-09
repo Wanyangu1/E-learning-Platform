@@ -1,27 +1,37 @@
 {% extends "base.html" %}
-{% block title %}My courses{% endblock %}
+
+{% block title %}My Courses{% endblock %}
+
 {% block content %}
- <h1>My courses</h1>
- <div class="module">
-   {% for course in object_list %}
-     <div class="course-info">
-       <h3>{{ course.title }}</h3>
-       <p>
-         <a href="{% url "course_edit" course.id %}">Edit</a>
-         <a href="{% url "course_delete" course.id %}">Delete</a>
-         <a href="{% url "course_module_update" course.id %}">Edit modules</a>
-         {% if course.modules.count > 0 %}
-         <a href="{% url "module_content_list" course.modules.first.id %}">
-         Manage contents</a>
-         {% endif %}
-       </p>
-     </div>
-   {% empty %}
-     <p>You haven't created any courses yet.</p>
-   {% endfor %}
-   <p>
-     <a href="{% url "course_create" %}" class="button">Create new 
-course</a>
-   </p>
- </div>
+<div class="container mt-5">
+  <h1 class="text-center mb-4">My Courses</h1>
+
+  <div class="module">
+    {% for course in object_list %}
+      <div class="card mb-3 shadow-sm">
+        <div class="card-body">
+          <h3 class="card-title">{{ course.title }}</h3>
+          <p class="card-text">
+            {% if course.modules.count > 0 %}
+              <a href="{% url 'module_content_list' course.modules.first.id %}" class="btn btn-outline-primary btn-sm">Manage Contents</a>
+            {% endif %}
+            <a href="{% url 'course_edit' course.id %}" class="btn btn-outline-warning btn-sm">Edit</a>
+            <a href="{% url 'course_module_update' course.id %}" class="btn btn-outline-info btn-sm">Edit Modules</a>
+            <a href="{% url 'course_delete' course.id %}" class="btn btn-danger btn-sm">Delete</a>
+          </p>
+        </div>
+      </div>
+    {% empty %}
+      <div class="alert alert-warning" role="alert">
+        You haven't created any courses yet.
+      </div>
+    {% endfor %}
+    <div class="text-center">
+      <a href="{% url 'my_courses' %}" class="btn btn-success mt-3">Create New Course</a>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap CDN -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 {% endblock %}

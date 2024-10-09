@@ -6,40 +6,70 @@
 {% endblock %}
 
 {% block content %}
-  <h1>
-    {{ module.title }}
-  </h1>
-  <div class="contents">
-    <h3>Modules</h3>
-    <ul id="modules">
-      {% for m in object.modules.all %}
-        <li data-id="{{ m.id }}" {% if m == module %}class="selected"{% endif %}>
-          <a href="{% url "student_course_detail_module" object.id m.id %}">
-            <span>
-              Module <span class="order">{{ m.order|add:1 }}</span>
-            </span>
-            <br>
-            {{ m.title }}
-          </a>
-        </li>
-      {% empty %}
-        <li>No modules yet.</li>
-      {% endfor %}
-    </ul>
-    <h3>
-      <a href="{% url "chat:course_chat_room" object.id %}">
-      Course chat room
-      </a>
-      </h3>
+<div class="container mt-3">
+  <!-- Course Title -->
+  <h1 class="text-center mb-4">{{ object.title }}</h1>
+
+  <div class="row">
+    <!-- Modules List -->
+    <div class="col-md-3">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Modules</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+          {% for m in object.modules.all %}
+            <li class="list-group-item {% if m == module %}active{% endif %}">
+              <a href="{% url "student_course_detail_module" object.id m.id %}" class="text-dark">
+                <strong>Module {{ m.order|add:1 }}:</strong> {{ m.title }}
+              </a>
+            </li>
+          {% empty %}
+            <li class="list-group-item">No modules yet.</li>
+          {% endfor %}
+        </ul>
+      </div>
+      
+      <!-- Chat Room Link -->
+      <div class="mt-4 text-center">
+        <a href="{% url 'chat:course_chat_room' object.id %}" class="btn btn-outline-primary">
+          <i class="fas fa-comments"></i> Join Course Chat Room
+        </a>
+      </div>
+    </div>
+
+    <!-- Module Contents -->
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          {% if module %}
+            <!-- Selected Module Title -->
+            <h3>{{ module.title }}</h3>
+
+            <!-- Module Contents -->
+            {% cache 600 module_contents module %}
+              {% for content in module.contents.all %}
+                {% with item=content.item %}
+                  <div class="content-item mb-4">
+                    <h5>{{ item.title }}</h5>
+                    <div class="content-body">
+                      {{ item.render }}
+                    </div>
+                  </div>
+                {% endwith %}
+              {% endfor %}
+            {% endcache %}
+          {% else %}
+            <h3>No modules available for this course.</h3>
+          {% endif %}
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="module">
-    {% cache 600 module_contents module %}
-      {% for content in module.contents.all %}
-        {% with item=content.item %}
-          <h2>{{ item.title }}</h2>
-          {{ item.render }}
-        {% endwith %}
-      {% endfor %}
-    {% endcache %}
-  </div>
+</div>
+
+<!-- Bootstrap and FontAwesome CDN -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
 {% endblock %}

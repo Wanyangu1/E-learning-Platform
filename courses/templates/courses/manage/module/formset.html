@@ -1,16 +1,27 @@
 {% extends "base.html" %}
+
 {% block title %}
- Edit "{{ course.title }}"
+  Edit "{{ course.title }}"
 {% endblock %}
+
 {% block content %}
- <h1>Edit "{{ course.title }}"</h1>
- <div class="module">
-   <h2>Course modules</h2>
-   <form method="post">
-     {{ formset }}
-     {{ formset.management_form }}
-     {% csrf_token %}
-     <input type="submit" value="Save modules">
-   </form>
- </div>
+<div class="container mt-5">
+  <h1 class="text-center">Edit Course: "{{ course.title }}"</h1>
+  
+  <div class="module mt-4">
+    <h2>Course Modules</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ formset.management_form }}
+      
+      <div class="list-group mb-4">
+        {{ formset }}
+      </div>
+
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Save Modules</button>
+      </div>
+    </form>
+  </div>
+</div>
 {% endblock %}

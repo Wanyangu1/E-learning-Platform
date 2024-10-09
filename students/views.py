@@ -33,7 +33,8 @@ class StudentEnrollCourseView(LoginRequiredMixin, FormView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('student_course_detail', args=[self.course.id])
+        return reverse_lazy('student_course_detail',
+                            args=[self.course.id])
 
 
 class StudentCourseListView(LoginRequiredMixin, ListView):
@@ -55,13 +56,14 @@ class StudentCourseDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # get course object
         course = self.get_object()
-        if 'module_id' in self.kwargs:
-            # get current module
-            context['module'] = course.modules.get(
-                                    id=self.kwargs['module_id'])
+        modules = course.modules.all()  
+        if modules.exists():
+            if 'module_id' in self.kwargs:
+                context['module'] = modules.get(id=self.kwargs['module_id'])
+            else:
+                # get first module
+                context['module'] = modules[0]
         else:
-            # get first module
-            context['module'] = course.modules.all()[0]
+            context['module'] = None  
         return context

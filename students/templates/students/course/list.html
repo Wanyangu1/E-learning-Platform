@@ -1,23 +1,42 @@
 {% extends "base.html" %}
 
-{% block title %}My courses{% endblock %}
+{% block title %}My Courses{% endblock %}
 
 {% block content %}
-  <h1>My courses</h1>
+<div class="container mt-4">
+  <h1 class="text-center mb-4">My Courses</h1>
 
-  <div class="module">
+  <!-- Courses Grid -->
+  <div class="row">
     {% for course in object_list %}
-      <div class="course-info">
-        <h3>{{ course.title }}</h3>
-        <p><a href="{% url "student_course_detail" course.id %}">
-        Access contents</a></p>
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">{{ course.title }}</h5>
+            <p class="card-text">
+              Instructor: {{ course.owner.username }}
+            </p>
+            <a href="{% url 'student_course_detail' course.id %}" class="btn btn-primary">
+              <i class="fas fa-book-open"></i> Access Contents
+            </a>
+          </div>
+        </div>
       </div>
     {% empty %}
-      <p>
-        You are not enrolled in any courses yet.
-        <a href="{% url "course_list" %}">Browse courses</a>
-        to enroll in a course.
-      </p>
+      <div class="col-12 text-center">
+        <div class="alert alert-info" role="alert">
+          You are not enrolled in any courses yet.
+        </div>
+        <a href="{% url 'course_list' %}" class="btn btn-outline-primary">
+          <i class="fas fa-search"></i> Browse Courses to Enroll
+        </a>
+      </div>
     {% endfor %}
   </div>
+</div>
+
+<!-- Bootstrap and FontAwesome CDN -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
 {% endblock %}

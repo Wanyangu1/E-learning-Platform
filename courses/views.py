@@ -45,9 +45,11 @@ class ManageCourseListView(OwnerCourseMixin, ListView):
     template_name = 'courses/manage/course/list.html'
     permission_required = 'courses.view_course'
 
-class CourseCreateView(OwnerCourseEditMixin, CreateView):
-    permission_required = 'courses.add_course'
 
+class MyCoursesView(OwnerCourseEditMixin, CreateView):
+    permission_required = 'courses.add_course'
+    model = Course
+    context_object_name = 'courses'
 
 class CourseUpdateView(OwnerCourseEditMixin, UpdateView):
     permission_required = 'courses.change_course'
@@ -218,18 +220,6 @@ class CourseDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        course = self.get_object()
-
-        if 'module_id' in self.kwargs:
-            try:
-                context['module'] = course.modules.get(id=self.kwargs['module_id'])
-            except course.modules.model.DoesNotExist:
-                context['module'] = None
-        else:
-            modules = course.modules.all()
-            if modules.exists():
-                context['module'] = modules[0]
-            else:
-                context['module'] = None
-
+        context['enroll_form'] = CourseEnrollForm(
+                                   initial={'course':self.object})
         return context

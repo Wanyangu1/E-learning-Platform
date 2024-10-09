@@ -1,6 +1,26 @@
-<h2>Enroll in Course</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Enroll</button>
-</form>
+<div class="container mt-5">
+    <!-- Enroll in Course Heading -->
+    <h2 class="text-center mb-4">Enroll in Course</h2>
+  
+    <!-- Enroll Form -->
+    <form method="post" class="shadow-sm p-4 bg-light rounded">
+      {% csrf_token %}
+      
+      <!-- Render the form fields with Bootstrap form classes -->
+      <div class="form-group">
+        {{ form.as_p }}
+      </div>
+  
+      <!-- Submit Button -->
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary btn-lg">
+          <i class="fas fa-user-plus"></i> Enroll Now
+        </button>
+      </div>
+    </form>
+  </div>
+  
+  <!-- Bootstrap and FontAwesome CDN -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+  

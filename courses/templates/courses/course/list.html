@@ -1,49 +1,79 @@
 {% extends "base.html" %}
 {% block title %}
- {% if subject %}
-   {{ subject.title }} courses
- {% else %}
-   All courses
- {% endif %}
+  {% if subject %}
+    {{ subject.title }} Courses
+  {% else %}
+    All Courses
+  {% endif %}
 {% endblock %}
+
 {% block content %}
- <h1>
-   {% if subject %}
-     {{ subject.title }} courses
-   {% else %}
-     All courses
-   {% endif %}
- </h1>
- <div class="contents">
-   <h3>Subjects</h3>
-   <ul id="modules">
-     <li {% if not subject %}class="selected"{% endif %}>
-       <a href="{% url "course_list" %}">All</a>
-     </li>
-     {% for s in subjects %}
-       <li {% if subject == s %}class="selected"{% endif %}>
-         <a href="{% url "course_list_subject" s.slug %}">
-           {{ s.title }}
-           <br><span>{{ s.total_courses }} courses</span>
-         </a>
-       </li>
-     {% endfor %}
-   </ul>
- </div>
- <div class="module">
-   {% for course in courses %}
-     {% with subject=course.subject %}
-       <h3>
-         <a href="{% url "course_detail" course.slug %}">
-           {{ course.title }}
-         </a>
-       </h3>
-       <p>
-         <a href="{% url "course_list_subject" subject.slug %}">{{ subject }}</a>.
-           {{ course.total_modules }} modules.
-           Instructor: {{ course.owner.get_full_name }}
-       </p>
-     {% endwith %}
-   {% endfor %}
- </div>
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar -->
+    <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+      <div class="sidebar-sticky pt-3">
+        <h3 class="text-center">Subjects</h3>
+        <ul class="nav flex-column">
+          <li class="nav-item {% if not subject %}active{% endif %}">
+            <a class="nav-link" href="{% url 'course_list' %}">
+              <i class="fas fa-book-open"></i> All Courses
+            </a>
+          </li>
+          {% for s in subjects %}
+          <li class="nav-item {% if subject == s %}active{% endif %}">
+            <a class="nav-link" href="{% url 'course_list_subject' s.slug %}">
+              <i class="fas fa-book"></i> {{ s.title }}
+              <span class="badge badge-primary">{{ s.total_courses }}</span>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">
+          {% if subject %}
+            {{ subject.title }} Courses
+          {% else %}
+            All Courses
+          {% endif %}
+        </h1>
+      </div>
+
+      <!-- Courses list -->
+      <div class="row">
+        {% for course in courses %}
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">
+                <a href="{% url 'course_detail' course.slug %}" class="text-decoration-none">
+                  <i class="fas fa-chalkboard-teacher"></i> {{ course.title }}
+                </a>
+              </h5>
+              <p class="card-text">
+                Subject: <a href="{% url 'course_list_subject' course.subject.slug %}" class="text-muted">{{ course.subject }}</a><br>
+                Modules: {{ course.total_modules }}<br>
+                Instructor: {{ course.owner.username }}
+              </p>
+              <a href="{% url 'course_detail' course.slug %}" class="btn btn-primary btn-sm">
+                <i class="fas fa-info-circle"></i> View Course
+              </a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Bootstrap and FontAwesome CDN -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
 {% endblock %}
